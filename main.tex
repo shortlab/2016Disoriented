@@ -1,0 +1,90 @@
+\documentclass[10pt,oneside,letterpaper,twocolumn]{article}
+\usepackage{color}
+\usepackage[top=0in,left=0.75in,right=0.75in,includefoot]{geometry}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{graphicx}
+\usepackage[font={small}]{caption}
+\usepackage{subcaption}
+\usepackage{tabularx}
+\usepackage{upgreek}
+%\usepackage{multicol}
+%\pagenumbering{gobble}
+\renewcommand{\abstractname}{}
+
+%\usepackage[super,comma,compress]{natbib}
+\usepackage[square,comma,compress]{natbib}
+\setlength{\bibsep}{4pt}
+
+\usepackage{cleveref}
+\crefformat{figure}{Fig.~#1}
+\crefformat{equation}{Eq.~(#1)}
+\crefformat{table}{Table~#1}
+\crefformat{section}{Section~#1}
+
+\makeatletter
+\renewcommand*\env@matrix[1][\arraystretch]{%
+  \edef\arraystretch{#1}%
+  \hskip -\arraycolsep
+  \let\@ifnextchar\new@ifnextchar
+  \array{*\c@MaxMatrixCols c}}
+\makeatother
+
+\usepackage{fancyhdr}
+\setlength{\headheight}{1in}
+\pagestyle{fancy}
+\fancyhead{}
+\lfoot{Cody A. Dennett}
+\cfoot{TG Orientation Mapping}
+\rfoot{\thepage}
+\renewcommand{\footrulewidth}{0.4pt}
+\renewcommand{\headrulewidth}{0pt}
+
+
+\begin{document}
+\twocolumn[
+  \begin{@twocolumnfalse}
+
+\begin{center}
+\LARGE{\textsc{Transient Grating Aluminum Orientation Outline}}
+
+\vspace{1pc}
+
+\normalsize Cody A. Dennett
+
+Department of Nuclear Science and Engineering, MIT, Cambridge, MA
+\vspace{1pc}
+
+\today
+\end{center}
+
+\begin{abstract}
+\input{section0.tex}
+\end{abstract}
+\vspace{1pc}
+
+\end{@twocolumnfalse}
+]
+
+\section{Introduction}
+\input{section1.tex}
+
+\section{Background}
+\input{section2.tex}
+
+\section{Methods}
+\input{section3.tex}
+
+\section{Results}
+\input{section4.tex}
+
+\section{Discussion}
+\input{section5.tex}
+
+\section{Conclusion}
+\input{section6.tex}
+
+\bibliographystyle{unsrt}
+%\bibliographystyle{abbrvnat}
+%\bibliography{ref_alt}
+\end{document}
