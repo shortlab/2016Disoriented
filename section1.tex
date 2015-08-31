@@ -1,17 +1,52 @@
 %Introduction
+\begin{itemize}
+ \item Motivation
+ 	\begin{itemize}
+ 	\item The goal of the work is to determine if Molecular Dynamics is an appropriate tool for simulating the linear elastic response of materials to the type of excitation used in transient grating spectroscopy for single crystal metals. 
+ 	\end{itemize}
+ \item What we did
+ 	\begin{itemize}
+ 	\item Measured the Rayleigh wave velocity of single crystal aluminum oriented at \{100\} and \{111\} using several different wavelengths of acoustic wave.
+ 	\item Measured the anisotropy of Rayleigh wave propagation with respect to relative orientation on the surface of single crystal aluminum and tungsten samples.
+ 	\item Simulate in MD the Rayleigh wave response of \{100\} and \{111\} oriented aluminum at several length-scales.
+ 	\item Simulate in MD the change in Rayleigh wave velocity with relative orientation on several surfaces of aluminum and copper. 
+ 	\item Make analytical predictions of the variation in surface wave velocity with relative orientation on single crystals using the elastodynamic Green's function formulation ala A. G. Every. 
+ 	\end{itemize}
+ \item What we get
+ 	\begin{itemize}
+ 	\item Excellent scaling between experiments on the single micron wavelength scale and MD simulations on the tens of nm wavelength scale. 
+ 	\item Agreement between theory, simulation, and experiment on the degree of variation in the Rayleigh wave speed with relative orientation. 
+ 	\end{itemize}
+ \item Use
+ 	\begin{itemize}
+ 	\item The ability to uniquely determine the orientation of unknown, low-index, single crystals using a combination of either MD simulations and experiment or theory and experiment. High-confidence predictions rely on absolute calibration using a sample of known acoustic properties such as single crystal tungsten.
+ 		\begin{itemize}
+ 		\item Compare to current techniques that are big, slow, and expensive like EBSD, Laue backscatter diffraction and XRD.
+ 		\end{itemize}
+ 	\item Clear bound on the uncertainty of experimental Rayleigh wave velocity measurements based on statistics and accounting for relative orientation effects in single crystals.
+ 		\begin{itemize}
+ 		\item Reference UK method for orientation mapping. Mention that this technique is reliant on textbook values of elastic constants as inputs and is not readily generalizable to cases in which mesoscale defects effect the elastic properties of materials under investigation.
+ 		\end{itemize}
+ 	\item Confidence in MD as a tool to simulate this types of responses. Allows for exploration of effects of mesoscale defects on Rayleigh wave propagation which cannot be easily accounted for in theory but are in fact areas of interest in experiment.
+ 	\end{itemize}
+\end{itemize}
 
-\begin{itemize}
-\item Desire to have a faster method of determining unknown crystallographic orientation
-\item UK Group 
-\begin{itemize}
-\item Have velocity mapping method 
-\item data is experimental and slow
-\end{itemize}
-\item Want to be able to make measurements faster and back them up with simulations instead of experimental libraries
-\item Current experimental methods like EBSD, Laue Backscatter diffraction and XRD
-\begin{itemize}
-\item Big
-\item Slow
-\item Expensive
-\end{itemize}
-\end{itemize}
+
+
+
+
+% \begin{itemize}
+% \item Desire to have a faster method of determining unknown crystallographic orientation
+% \item UK Group 
+% \begin{itemize}
+% \item Have velocity mapping method 
+% \item data is experimental and slow
+% \end{itemize}
+% \item Want to be able to make measurements faster and back them up with simulations instead of experimental libraries
+% \item Current experimental methods like EBSD, Laue Backscatter diffraction and XRD
+% \begin{itemize}
+% \item Big
+% \item Slow
+% \item Expensive
+% \end{itemize}
+% \end{itemize}
