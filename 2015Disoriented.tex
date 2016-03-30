@@ -1,0 +1,320 @@
+%% LyX 2.0.6 created this file.  For more info, see http://www.lyx.org/.
+%% Do not edit unless you really know what you are doing.
+\documentclass[english]{article}
+\usepackage[OT1]{fontenc}
+\usepackage[latin9]{inputenc}
+\usepackage{geometry}
+\geometry{verbose,tmargin=1in,bmargin=1in,lmargin=1in,rmargin=1in}
+\usepackage{units}
+\usepackage{babel}
+\begin{document}
+
+\title{Building the Bridge to Predictive, Mesoscale Radiation Materials
+Science: An Example from Transient Grating Spectroscopy}
+
+
+\author{C. Dennett, P. Cao, A. Vega-Flick, S. E. Ferry, A. A. Maznev, K.
+A. Nelson, M. P. Short}
+\maketitle
+\begin{abstract}
+Understanding and predicting mesoscale material properties requires
+a synchronzied effort among theory, simulations, and experiments.
+Predictive simulations represent the way to guiding and understanding
+mesoscale experiments, as theories of mesoscale material response
+have yet to mature. We show the application of transient grating (TG)
+spectroscopy as an illustrative method to bridge the gap towards understanding
+mesoscale radiation-induced material property changes. Classical,
+non-equilibrium molecular dynamics (MD) simulations are shown to accurately
+predict theoretically-predicted and experimentally-measured changes
+in Young's modulus due to small variations in anisotropic single crystal
+orientation, at levels similar to those induced by irradiation. With
+the ability of predictive MD to simulate the TG signal validated by
+both theory and experiment, it can be used as a tool to both guide
+and understand TG experiments of materials with defect populations,
+which current theories cannot yet describe. In addition, the results
+illustrate the usage of TG spectroscopy to rapidly determine unknown
+single crystal orientations.
+\end{abstract}
+
+\section{Introduction}
+
+The mesoscale frontier of science is ripe with opportunities for discovery
+{[}REF - Crabtree and Sarrao{]}, with the ultimate goal of linking
+atomistic, unit processes with component-level performance. Since
+its inception {[}REF - Middle Way{]}, those in the growing field of
+mesoscale science (MSS) seek to understand the mechanistic reasons
+for the evolution of material properties not just from defects, but
+also from defect populations, superstructures, and spatiotemporal
+variations. However, significant difficulty arises in the direct theoretical
+prediction and the experimental measurement of mesoscale properties
+of materials. Theory often treats response functions, such as that
+of elasticity or thermal conductivity, as a superposition of a homogeneous
+medium with a mathematically convenient distribution of single defects.
+Analytical treatment of a complex material, containing a wide variety
+of defect types, sizes, and spatial distributions, is beyond mesoscale
+theory at the moment. In these cases experimental measurements can
+yield insights to elucidate underlying theories, though direct mesoscale
+measurements continue to prove difficult to perform, or even conceive.
+
+Examples of emerging mesoscale fields exist throughout the literature,
+ranging from strain rate-dependent flow in amorphous materials {[}REF{]},
+to stress corrosion cracking {[}REF{]}, to {[}MORE{]}. Radiation damage
+provides an excellent example of the need for such an approach, as
+no unified theory can yet predict the response of an arbitrary material
+to radiation damage. In fact, the standardized unit of measure, the
+displacements per atom (DPA), is not a measurement, but a calculated
+exposure parameter. It does not account for the differing defect populations
+(point defects, dislocations, voids, precipitates, stacking faults...)
+responsible for the determination of material properties of interest,
+reflected in multiple datasets of differing radiation damage response
+at identical DPA levels, with different environmental parameters {[}REFs{]}.
+In this case, directly coupled mesoscale predictions and measurements
+are needed to understand and predict radiation's effects on material
+property changes.
+
+Ideally, one would develop experimental ideas based on a basis of
+theory, and then use simulations to understand the mechanism of the
+response. Another potential path for success is to use simulations
+as a predictive tool, validated by theory, to simultaneously guide
+and understand experimental measurements. For a field without a fully
+described theoretical framework, such as mesoscale radiation materials
+science, this second path is the only path. However, it cannot proceed
+without first rigorously validating the simulation framework using
+theoretical predictions and well-understood experimental measurements.
+
+One promising tool for direct, mesoscale measurements is transient
+grating (TG) spectroscopy \cite{Rogers2000}. This technique projects
+a sinusoidal pattern of laser light onto a material on the order of
+100 microns in width, allowing for direct mesoscale measurement of
+elastic constants, thermal conductivity, and acoustic damping of surface
+acoustic waves (SAWs). Its ability to discern changes in material
+properties due to underlying defect populations depends strongly on
+the repeatable sensitivity of the measurement itself. Because these
+material properties can be anisotropic in solid materials, and this
+anisotropy can grow tremendously with irradiation {[}REF{]}, knowing
+the precise surface-normal orientation \emph{and} relative rotation
+of the crystal face are critical to the sensitivity of the measurement.
+The nature of most of the measurements made using TG spectroscopy
+in the past has precluded the need for such detailed, careful studies.
+Most studies have focused on determining thermal transport in transparent
+liquids {[}REF{]}, or SAW propagation on elastically isotropic solids
+\cite{Hofmann2015,Hofmann2015a}. Most studies simply do not account
+for surface rotation in the measurements, instead relegating resultant
+measurement variations to experimental error {[}REFs{]}. Even the
+quality of the surface makes an enormous difference, with 8-27\% differences
+in SAW speed reported on common steels as a function of the method
+of surface preparation \cite{Kitazawa2015}.
+
+These approaches may have worked for the quantities measured in previous
+studies, but in radiation materials science, quantities like the Young's
+modulus must be reliably determined to 100's of parts per million
+(ppm). This is due to the fact that radiation-induced defects change
+elastic constants in well-defined, though small, amounts. Vacancies
+have been analytically \cite{Dienes1952,Nabarro1952,Dienes1952a}
+and computationally \cite{Chiesa2009} shown to change elastic constants
+on the order one percent per percent concentration. Interstitial atoms
+are predicted to have an effect between two \cite{Chiesa2009} and
+ten \cite{Dienes1952,Nabarro1952,Dienes1952a} times as strong in
+magnitude. These defects are found in levels from $\mathrm{10^{-10}}$
+to $\mathrm{10^{-4}}$ atom fraction for vacancies from room temperature
+to the melting point, respectively, and at levels thousands of times
+lower for interstitials. Radiation damage can increase vacancy concentrations
+to a theoretical maximum of one percent during intense irradiation
+\cite{Averback1977}. Dislocations change the Young's modulus via
+Equation \ref{eq:Dislocation-Youngs-Modulus-Change}:
+\begin{equation}
+\frac{\Delta E}{E}=\frac{\pi k\rho_{\bot}L^{2}}{3\, ln\left(\frac{L}{\left|\overrightarrow{b}\right|}\right)\,}\label{eq:Dislocation-Youngs-Modulus-Change}
+\end{equation}
+where \emph{E} is the Young's modulus, $\Delta E$ is its change,
+$\rho_{\bot}$ is the dislocation density, L is the average dislocation
+pinned segment length, and k is unity for a screw dislocation, and
+$\left(1-\nu\right)$ for an edge dislocation, where $\nu$ is the
+Poisson's ratio \cite{Friedel1953}. Voids are expected to reduce
+the Young's modulus by a magnitude on the order of their volume fraction.
+In all cases, resolving changes in the Young's modulus well below
+1\% is critical to the usage of TG spectroscopy as a mesoscale measurement
+technique for radiation damage.
+
+Measurement of the anisotropy of the Young's modulus provides a convenient
+method of validating both the experimental technique and the simulation
+approach at reliably discerning such small variations in Young's modulus.
+Here anisotropy is defined by the Zener anisotropy ratio $\left(A\right)$
+in Equation \ref{eq:Anisotropy ratio}:
+\begin{equation}
+A=\frac{2C_{44}}{\left(C_{11}-C_{12}\right)}\label{eq:Anisotropy ratio}
+\end{equation}
+where $\mathrm{C_{ij}}$ is the elastic constant in the ith row and
+the jth column of the elasticity tensor \cite{Zener1947}. Therefore,
+by simply rotating a single crystal of a material with a known elastic
+anisotropy, one can tune the expected change in Young's modulus from
+theory, while simultaneously measuring and predicting it using TG
+and MD, respectively. The ultimate test is to select materials with
+a very low degree of anisotropy, like aluminum, which exhibits the
+second lowest anisotropy ratio $\left(A=1.22\right)$ only to tungsten
+$\left(A=1.01\right)$ \cite{Simmons1971}, resulting in expected
+changes in SAW speed of fractions of a percent per degree of rotation.
+Should the TG measurements made on materials like aluminum be discernible,
+they will simultaneously qualify the technique for the study of fine
+changes in Young's modulus, and set a lower bound on the noise-based
+sensitivity of the TG spectroscopy technique. It should also be noted
+that irradiation has been shown to increase the anisotropy of \_\_\_
+{[}REF{]}, helping to more confidently transition the application
+of TG spectroscopy from pure materials to irradiated materials.
+
+In this manuscript, we show the application of transient grating (TG)
+spectroscopy to measuring one quantity of interest in radiation materials
+science, the Young's modulus, within the limits of sensitivity for
+expected changes due to irradiation. We then hypothesize that classical
+molecular dynamics (MD) is an appropriate tool for simulating the
+linear elastic response of materials to the type of excitation used
+in transient grating spectroscopy for single crystal metals, therefore
+making it an appropriate predictive tool. Two model materials, pure
+Al and Cu single crystals, are chosen to elucidate the sensitivity
+limits of such a measurement by rotating the crystal, and measuring
+orientation-dependent Rayleigh wave speeds from projected TGs. Then,
+classical MD simulations are used to simulate the TG spectroscopy
+signal on identical materials at different orientations. These combined
+experimental and simulated results are plotted on theoretically predicted
+slowness surfaces using the elastodynamic Green's function {[}REF{]},
+showing excellent agreement. Scaled-down MD simulations are shown
+to predict larger-scale TG response, setting a lower limit of simulation
+scale applicable to predicting TG measurements. With theory, simulation,
+and experiment in agreement, work can now proceed to predict and measure
+materials with defect populations, forging ahead into an area without
+a full theoretical underpinning, but with confidence in mesoscale
+simulations as a quantitative, predictive tool.
+
+In addition, the utility of TG spectroscopy to determine unknown crystal
+orientations by similar rotational measurements is demonstrated, as
+a potentially more rapid and accessible alternative to Laue backscatter
+diffraction or electron backscatter diffraction (EBSD).
+
+
+\section{Methods}
+
+In the following sections, examples of the measurement, simulation,
+and analysis methods are given for expanation. All raw data files,
+processing scripts, output datasets, simulation input files, intermediate
+relaxed atom files, final atomic configurations, compiled/processed
+datafiles, and the code used to generate the slowness surfaces with
+input parameters are hosted permanently on our GitHub repository {[}REF{]}.
+
+
+\subsection{Experimental Procedure (Figure 1a)}
+\begin{itemize}
+\item Procurement \& specs for W, Al, and Cu single crystals, confirmation
+method(s) for orientation of faces, methods of surface preparation
+\item Minimal, yet functional, description of the TG facility, offload what
+you can to the JOM paper's description
+
+\begin{itemize}
+\item Laser power, rep rate, spot size, grating spacing, and sample management
+(rotation stage) parameters detailed
+\item Include heterodyne discussion, offload what you can to the Maznev
+Opt. Lett. paper
+\end{itemize}
+\item Calibration procedure with tungsten - be quite specific here, wasn't
+mentioned as much in the JOM paper
+\item Rotation \& measurement procedure for each material, mention repetition,
+limits of measurement uncertainty from signal noise floor, knowledge
+of specimen rotation on the stage (half the smallest gradation)
+\item Detailed explanation with equations of the data decomposition process,
+as well as analyzing the frequency power spectrum for peak frequency.
+Mention FWHM added to the uncertainty of the measurement.
+
+\begin{itemize}
+\item Heterodyne phase correcting, non-exponential thermal decay subtraction,
+derivative taking, periodogram taking, peak finding, and velocity
+calculations from measured calibration sample from each run
+\end{itemize}
+\end{itemize}
+
+\subsection{Simulation Procedure (Figure 1b)}
+\begin{itemize}
+\item First mention that we used LAMMPS, software versions, potentials used
+with parameters and references (and citations for validation of these
+potentials)
+\item Quickly mention high-level process:
+
+\begin{itemize}
+\item Automatically build (001) and (111) surfaces of each material in LAMMPS,
+NPT-relax to \_\_\_ timesteps (or \_\_\_ time)
+\item Feed relaxed data into laser simulation, and track the motion of surface
+atoms during an NVE relaxation
+\end{itemize}
+\item Next, show a schematic and explanation of the TG projection simulation
+process
+
+\begin{itemize}
+\item Mention breaking periodicity in z-direction to study wave propagation,
+with quantitative numbers
+\item Mention x/y periodic boundary conditions
+\item Show schematic and temperature function describing the heating pattern,
+emphasize that it's time-dependent too
+\begin{equation}
+T\left(x,z,t\right)=T_{0}\left(1+\left(\left|x\right|<x_{0}\right)\frac{t}{t_{0}}e^{\nicefrac{-z}{z_{0}}}\right)
+\end{equation}
+
+
+\begin{itemize}
+\item Talk about how/why we tuned values of $\mathit{t_{0},\, x_{0},\, z_{0}}$
+to get the best data - we will be asked!
+\item Mention that adding an x-Gaussian was also tried, but made no difference
+\end{itemize}
+\item Show how simulation data (COMALL{[}3{]} - COM1x{[}3{]}) can be analyzed
+in precisely the same way, using the same scripts, as the experimental
+data (include Sara's/Mike's script from NiAl)
+\end{itemize}
+\item Finally, show the test matrix (sizes tested, number of atoms, timesteps
+used, etc. since some didn't completely finish)
+\end{itemize}
+
+\subsection{Theoretical Slowness Surface Prediction}
+\begin{itemize}
+\item Need to find a source where Every puts forth all the theory
+
+\begin{itemize}
+\item Based on the methodology presented by Farnell in Physical Acoustics
+vol. VI
+\item Hopefully also a source where he explains/demos the code
+\end{itemize}
+\item Mention how it works, and what the various lines mean in terms of
+valid/likely modes
+\end{itemize}
+
+\section{Results}
+
+
+\subsection{Experimental Results}
+\begin{itemize}
+\item Mention calibration data in the next, no need for a figure.
+\item Figure 2: Raw data showing SAW speeds with rotation for two different
+surfaces, on two different materials
+\end{itemize}
+
+\subsection{Simulation Results}
+\begin{itemize}
+\item Table 1: Tabulated simulation data, since there isn't nearly as much
+as the experimental stuff
+\end{itemize}
+
+\subsection{Combined Results}
+\begin{itemize}
+\item Figure 3 (the big one): Quarter slowness surfaces for each material
+and surface orientation, with theory/experiment/simulation all together
+\item Figure 4 (the other big one): Combined experiment/theory/simulation
+graphs, showing correlation bewteen expt. \& simulation, graph of
+\% error below, explanation of why no error bars (too small to see),
+and a cutoff showing where we believe the ``range of validity''
+to be with MD
+\end{itemize}
+
+\section{Discussion}
+
+
+\section{Conclusion}
+
+\bibliographystyle{unsrt}
+\bibliography{2015Disoriented}
+
+\end{document}
