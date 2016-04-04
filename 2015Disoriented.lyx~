@@ -65,17 +65,15 @@
 \begin_body
 
 \begin_layout Title
-Building the Bridge to Predictive, Mesoscale Radiation Materials Science:
- An Example from Transient Grating Spectroscopy
+Simulating Transient Grating Spectroscopy with Molecular Dynamics: Bridging
+ the Gap to Direct Mesoscale Measurements
 \end_layout
 
 \begin_layout Author
 C.
  Dennett, P.
  Cao, A.
- Vega-Flick, S.
- E.
- Ferry, A.
+ Vega-Flick, A.
  A.
  Maznev, K.
  A.
@@ -85,23 +83,20 @@ C.
 \end_layout
 
 \begin_layout Abstract
-Understanding and predicting mesoscale material properties requires a synchronzi
-ed effort among theory, simulations, and experiments.
- Predictive simulations represent the way to guiding and understanding mesoscale
- experiments, as theories of mesoscale material response have yet to mature.
- We show the application of transient grating (TG) spectroscopy as an illustrati
-ve method to bridge the gap towards understanding mesoscale radiation-induced
- material property changes.
- Classical, non-equilibrium molecular dynamics (MD) simulations are shown
- to accurately predict theoretically-predicted and experimentally-measured
- changes in Young's modulus due to small variations in anisotropic single
- crystal orientation, at levels similar to those induced by irradiation.
- With the ability of predictive MD to simulate the TG signal validated by
- both theory and experiment, it can be used as a tool to both guide and
- understand TG experiments of materials with defect populations, which current
- theories cannot yet describe.
- In addition, the results illustrate the usage of TG spectroscopy to rapidly
- determine unknown single crystal orientations.
+We demonstrate that classical molecular dynamics (MD) simulations can be
+ used to accurately simulate orientation-based changes in Young's modulus
+ in transient grating (TG) experiments, by comparing with experimental measureme
+nts and theoretical predictions.
+ The agreement between theory, simulation, and experiment gives confidence
+ in classical MD as a predictive tool to simulate defect-based changes in
+ Young's modulus, which cannot yet be fully treated by theory.
+ This ability is of critical importance when using TG spectroscopy to measure
+ material property changes induced by radiation damage, which may vary by
+ amounts formerly too small for reliable 
+\emph on
+in-situ
+\emph default
+ detection.
 \end_layout
 
 \begin_layout Section
@@ -109,15 +104,28 @@ Introduction
 \end_layout
 
 \begin_layout Standard
-The mesoscale frontier of science is ripe with opportunities for discovery
- [REF - Crabtree and Sarrao], with the ultimate goal of linking atomistic,
- unit processes with component-level performance.
- Since its inception [REF - Middle Way], those in the growing field of mesoscale
- science (MSS) seek to understand the mechanistic reasons for the evolution
- of material properties not just from defects, but also from defect populations,
- superstructures, and spatiotemporal variations.
+The frontier of mesoscale science (MSS) is ripe with opportunities for discovery
+ 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "Sarrao2015"
+
+\end_inset
+
+, with the ultimate goal of linking atomistic, unit processes with component-lev
+el performance.
+ Since its inception 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "Laughlin1999"
+
+\end_inset
+
+, those in the growing field of MSS seek to understand the mechanistic reasons
+ for the evolution of material properties not just from defects, but also
+ from defect populations, superstructures, and spatiotemporal variations.
  However, significant difficulty arises in the direct theoretical prediction
- and the experimental measurement of mesoscale properties of materials.
+ and experimental measurement of mesoscale material properties.
  Theory often treats response functions, such as that of elasticity or thermal
  conductivity, as a superposition of a homogeneous medium with a mathematically
  convenient distribution of single defects.
@@ -130,110 +138,29 @@ The mesoscale frontier of science is ripe with opportunities for discovery
 \end_layout
 
 \begin_layout Standard
-Examples of emerging mesoscale fields exist throughout the literature, ranging
- from strain rate-dependent flow in amorphous materials [REF], to stress
- corrosion cracking [REF], to [MORE].
- Radiation damage provides an excellent example of the need for such an
- approach, as no unified theory can yet predict the response of an arbitrary
- material to radiation damage.
- In fact, the standardized unit of measure, the displacements per atom (DPA),
- is not a measurement, but a calculated exposure parameter.
- It does not account for the differing defect populations (point defects,
- dislocations, voids, precipitates, stacking faults...) responsible for the
- determination of material properties of interest, reflected in multiple
- datasets of differing radiation damage response at identical DPA levels,
- with different environmental parameters [REFs].
- In this case, directly coupled mesoscale predictions and measurements are
- needed to understand and predict radiation's effects on material property
- changes.
-\end_layout
-
-\begin_layout Standard
 Ideally, one would develop experimental ideas based on a basis of theory,
  and then use simulations to understand the mechanism of the response.
  Another potential path for success is to use simulations as a predictive
  tool, validated by theory, to simultaneously guide and understand experimental
  measurements.
  For a field without a fully described theoretical framework, such as mesoscale
- radiation materials science, this second path is the only path.
+ radiation materials science, this second path is the only viable one.
  However, it cannot proceed without first rigorously validating the simulation
  framework using theoretical predictions and well-understood experimental
  measurements.
+ In the absence of fully-developed theory, predictive simulations and experiment
+al measurements must be able to directly show radiation-induced changes
+ in material properties over mesoscale (10's to 100's of micron) volumes,
+ with enough sensitivity to exclude confounding effects.
 \end_layout
 
 \begin_layout Standard
-One promising tool for direct, mesoscale measurements is transient grating
- (TG) spectroscopy 
-\begin_inset CommandInset citation
-LatexCommand cite
-key "Rogers2000"
-
-\end_inset
-
-.
- This technique projects a sinusoidal pattern of laser light onto a material
- on the order of 100 microns in width, allowing for direct mesoscale measurement
- of elastic constants, thermal conductivity, and acoustic damping of surface
- acoustic waves (SAWs).
- Its ability to discern changes in material properties due to underlying
- defect populations depends strongly on the repeatable sensitivity of the
- measurement itself.
- Because these material properties can be anisotropic in solid materials,
- and this anisotropy can grow tremendously with irradiation [REF], knowing
- the precise surface-normal orientation 
-\emph on
-and
-\emph default
- relative rotation of the crystal face are critical to the sensitivity of
- the measurement.
- The nature of most of the measurements made using TG spectroscopy in the
- past has precluded the need for such detailed, careful studies.
- Most studies have focused on determining thermal transport in transparent
- liquids [REF], or SAW propagation on elastically isotropic solids 
-\begin_inset CommandInset citation
-LatexCommand cite
-key "Hofmann2015,Hofmann2015a"
-
-\end_inset
-
-.
- Most studies simply do not account for surface rotation in the measurements,
- instead relegating resultant measurement variations to experimental error
- [REFs].
- Even the quality of the surface makes an enormous difference, with 8-27%
- differences in SAW speed reported on common steels as a function of the
- method of surface preparation 
-\begin_inset CommandInset citation
-LatexCommand cite
-key "Kitazawa2015"
-
-\end_inset
-
-.
-\end_layout
-
-\begin_layout Standard
-These approaches may have worked for the quantities measured in previous
- studies, but in radiation materials science, quantities like the Young's
- modulus must be reliably determined to 100's of parts per million (ppm).
+In radiation materials science, quantities like the Young's modulus must
+ be reliably determined to 100's of parts per million (ppm).
  This is due to the fact that radiation-induced defects change elastic constants
  in well-defined, though small, amounts.
- Vacancies have been analytically 
-\begin_inset CommandInset citation
-LatexCommand cite
-key "Dienes1952,Nabarro1952,Dienes1952a"
-
-\end_inset
-
- and computationally 
-\begin_inset CommandInset citation
-LatexCommand cite
-key "Chiesa2009"
-
-\end_inset
-
- shown to change elastic constants on the order one percent per percent
- concentration.
+ Vacancies have been analytically and computationally shown to change elastic
+ constants on the order one percent per percent concentration.
  Interstitial atoms are predicted to have an effect between two 
 \begin_inset CommandInset citation
 LatexCommand cite
@@ -268,7 +195,8 @@ key "Averback1977"
 \end_inset
 
 .
- Dislocations change the Young's modulus via Equation 
+ Irradiation can also create dislocations, which change the Young's modulus
+ via Equation 
 \begin_inset CommandInset ref
 LatexCommand ref
 reference "eq:Dislocation-Youngs-Modulus-Change"
@@ -317,6 +245,32 @@ key "Friedel1953"
  In all cases, resolving changes in the Young's modulus well below 1% is
  critical to the usage of TG spectroscopy as a mesoscale measurement technique
  for radiation damage.
+\end_layout
+
+\begin_layout Standard
+One promising tool for direct, mesoscale measurements is transient grating
+ (TG) spectroscopy 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "Rogers2000"
+
+\end_inset
+
+.
+ This technique projects a sinusoidal pattern of laser light onto a material
+ on the order of 100 microns in width, allowing for direct mesoscale measurement
+ of elastic constants, thermal conductivity, and acoustic damping of surface
+ acoustic waves (SAWs).
+ Its ability to discern changes in material properties due to underlying
+ defect populations depends strongly on the repeatable sensitivity of the
+ measurement itself.
+ Because these material properties can be anisotropic in solid materials,
+ knowing the precise surface-normal orientation 
+\emph on
+and
+\emph default
+ relative rotation of the crystal face are critical to the sensitivity of
+ the measurement.
 \end_layout
 
 \begin_layout Standard
@@ -377,46 +331,33 @@ key "Simmons1971"
 
 , resulting in expected changes in SAW speed of fractions of a percent per
  degree of rotation.
- Should the TG measurements made on materials like aluminum be discernible,
- they will simultaneously qualify the technique for the study of fine changes
- in Young's modulus, and set a lower bound on the noise-based sensitivity
- of the TG spectroscopy technique.
- It should also be noted that irradiation has been shown to increase the
- anisotropy of ___ [REF], helping to more confidently transition the application
- of TG spectroscopy from pure materials to irradiated materials.
+ Radiation has even been shown to change the anisotropy ratio of tungsten
+ 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "Hofmann2015"
+
+\end_inset
+
+, which would represent another test of the simulation and experimental
+ techniques where theory is still lacking.
+ Should orientation-based TG measurements made on materials like aluminum
+ be discernible, they will simultaneously qualify the technique for the
+ study of fine changes in Young's modulus, and set a lower bound on the
+ noise-based sensitivity of the TG spectroscopy technique.
+ In addition, correctly predicting these orientation-based changes in the
+ TG signal will validate classical MD as a predictive tool for such small
+ changes in Young's modulus.
 \end_layout
 
 \begin_layout Standard
 In this manuscript, we show the application of transient grating (TG) spectrosco
-py to measuring one quantity of interest in radiation materials science,
- the Young's modulus, within the limits of sensitivity for expected changes
- due to irradiation.
- We then hypothesize that classical molecular dynamics (MD) is an appropriate
- tool for simulating the linear elastic response of materials to the type
- of excitation used in transient grating spectroscopy for single crystal
- metals, therefore making it an appropriate predictive tool.
- Two model materials, pure Al and Cu single crystals, are chosen to elucidate
- the sensitivity limits of such a measurement by rotating the crystal, and
- measuring orientation-dependent Rayleigh wave speeds from projected TGs.
- Then, classical MD simulations are used to simulate the TG spectroscopy
- signal on identical materials at different orientations.
- These combined experimental and simulated results are plotted on theoretically
- predicted slowness surfaces using the elastodynamic Green's function [REF],
- showing excellent agreement.
- Scaled-down MD simulations are shown to predict larger-scale TG response,
- setting a lower limit of simulation scale applicable to predicting TG measureme
-nts.
- With theory, simulation, and experiment in agreement, work can now proceed
- to predict and measure materials with defect populations, forging ahead
- into an area without a full theoretical underpinning, but with confidence
- in mesoscale simulations as a quantitative, predictive tool.
-\end_layout
-
-\begin_layout Standard
-In addition, the utility of TG spectroscopy to determine unknown crystal
- orientations by similar rotational measurements is demonstrated, as a potential
-ly more rapid and accessible alternative to Laue backscatter diffraction
- or electron backscatter diffraction (EBSD).
+py to measuring the Young's modulus within the limits of sensitivity for
+ expected changes due to irradiation.
+ We then hypothesize that classical MD can predict the linear elastic response
+ of materials within levels expected to change due to irradiation.
+ A lower size limit of ___nm for MD simulations is shown to retain excellent
+ scaling with experiments to less than __% error.
 \end_layout
 
 \begin_layout Section
@@ -593,6 +534,10 @@ Results
 
 \begin_layout Subsection
 Experimental Results
+\end_layout
+
+\begin_layout Itemize
+Mention calibration data in the next, no need for a figure.
 \end_layout
 
 \begin_layout Itemize
