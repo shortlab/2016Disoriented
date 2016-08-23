@@ -1,0 +1,123 @@
+# ------------------------ INITIALIZATION ----------------------------
+echo both
+#log		log.c
+units           metal
+dimension       3
+boundary        p p p
+atom_style      atomic
+shell         mkdir  cfg
+shell         mkdir  dump
+
+
+# ----------------------- ATOM DEFINITION & Force Field -------------
+# ----------------------- ATOM DEFINITION ----------------------------
+lattice         fcc 4.024845358 #origin 0.0 0.0 0.0 orient x 1 -1 0 orient y 1 1 -2 orient z 1 1 1
+variable        Lx equal 52
+variable        Ly equal 2
+variable        Lz equal 208
+variable        boxLZ equal 218
+region          SYSTEM block -${Lx} ${Lx} -${Ly} ${Ly} -${Lz} 0 units lattice
+region          BOX block -${Lx} ${Lx} -${Ly} ${Ly} -${boxLZ} 5 units lattice
+create_box      1 BOX 
+create_atoms    1 region SYSTEM
+
+delete_atoms     porosity BOX 0.0002 <RAND1>    ##random seed <RAND1>
+
+#---------------------------------------------------------------------------------
+pair_style      eam/alloy
+pair_coeff  	  * * Al_wkg_MSMSE_2009.set Al
+
+#----------------------------------------------------------------------------------
+velocity       all create 300.0 <RAND2> mom yes rot yes dist gaussian         ##random seed <RAND2>
+
+fix             1 all npt temp 300 300 0.1 iso 0.0 0.0 2  
+run      10000
+unfix 1
+
+fix            2 all nvt temp 300.0 300.0 0.1
+
+run      10000
+reset_timestep 0
+unfix    2
+#---------------------- DEFINE Laser GERION and GROUP ----------------
+region       R1  block -75  75  INF  INF  INF  5  units box
+group        G1 region R1
+group        G2 subtract all G1
+
+
+#define     temperature/pressure calculation  group
+variable    x1atom atom "x>=0  &&  x<4 &&  z>-40 && z<1"     ##NEW!!!!!!!!!!!!
+variable    x2atom atom "x>=-209.292  &&  x<-205.292 &&  z>-40 && z<1"
+variable    x3atom atom "x>=0  &&  x<4 &&  z>-20 && z<1"
+variable    x4atom atom "x>=-209.292  &&  x<-205.292 &&  z>-20 && z<1"
+variable    x5atom atom "x>=196  &&  x<200 &&  z>-40 && z<1"
+
+group       x1atom variable x1atom 
+group       x2atom variable x2atom 
+group       x3atom variable x3atom 
+group       x4atom variable x4atom 
+group       x5atom variable x5atom 
+
+
+compute      COM1x x1atom com 
+compute      COM2x x2atom com 
+compute      COM3x x3atom com 
+compute      COM4x x4atom com 
+compute      COM5x x5atom com 
+
+compute      COMall all com 
+
+#Temperature profile
+#variable      Tprofile atom 300*(1+(step/5000)*2.5*exp(z/40))
+variable      Tprofile atom 300*(1+(step/5000)*2.5*exp(z/75))
+
+# ------------------------- SETTINGS ---------------------------------
+thermo          100
+thermo_style    custom step lx pxx pyy pzz temp c_COM1x[1] c_COM1x[2] c_COM1x[3] c_COM2x[1] c_COM2x[2] c_COM2x[3] c_COM3x[1] c_COM3x[2] c_COM3x[3] c_COM4x[1] c_COM4x[2] c_COM4x[3]  c_COM5x[1] c_COM5x[2] c_COM5x[3] c_COMall[1] c_COMall[2] c_COMall[3]  
+ 
+timestep       0.002
+
+
+compute dispall all displace/atom 
+# ---------------- Run Laser Material Interaction --------------------
+#dump          1 all custom 1000 dump/z1dump.atom id type x y z c_dispall[1]  c_dispall[2]  c_dispall[3] c_dispall[4]
+#dump          2 all cfg 100 cfg/*.cfg mass type xs ys zs   
+#dump_modify   2 element Al
+
+#relax for 2 PS
+#fix           1 all nvt temp 300.0 300.0 0.1
+#run  1000
+#unfix         1
+
+fix           1  all nve
+fix           3temp  G1  langevin  v_Tprofile  0  0.1  378411   #TEST ALL
+run           5000
+
+
+variable  com1_x equal "c_COM1x[1]"
+variable  com1_y equal "c_COM1x[2]"
+variable  com1_z equal "c_COM1x[3]"
+variable  com2_x equal "c_COM2x[1]"
+variable  com2_y equal "c_COM2x[2]"
+variable  com2_z equal "c_COM2x[3]"
+variable  com3_x equal "c_COM3x[1]"
+variable  com3_y equal "c_COM3x[2]"
+variable  com3_z equal "c_COM3x[3]"
+variable  com4_x equal "c_COM4x[1]"
+variable  com4_y equal "c_COM4x[2]"
+variable  com4_z equal "c_COM4x[3]"
+variable  com5_x equal "c_COM5x[1]"
+variable  com5_y equal "c_COM5x[2]"
+variable  com5_z equal "c_COM5x[3]"
+variable  comall_x equal "c_COMall[1]"
+variable  comall_y equal "c_COMall[2]"
+variable  comall_z equal "c_COMall[3]"
+
+
+fix          2 all print 100 "${com1_x}   ${com1_y}   ${com1_z}  ${com2_x}   ${com2_y}   ${com2_z} ${com3_x}   ${com3_y}   ${com3_z} ${com4_x}   ${com4_y}   ${com4_z} ${com5_x}   ${com5_y}   ${com5_z} ${comall_x}   ${comall_y}   ${comall_z}" file COM.data screen no
+#-------------------------- Wave Propagation -------------------------
+unfix        3temp  
+run          1000000
+
+
+
